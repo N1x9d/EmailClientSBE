@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/assets/js/Main.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Oswald:400,500,600,700%7CPoppins:400,400i,500,600&display=swap"
+          rel="stylesheet">
+
+</head>
+
+<body>
+<form class="eml">
+  <div class="mb-3">
+    <label for="EmailAddr" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="EmailAddr" aria-describedby="emailHelp">
+  </div>
+
+  <div class="mb-3">
+    <label for="Subject" class="form-label">Subject</label>
+    <input type="text" class="form-control" id="Subject">
+  </div>
+  <div class="mb-3">
+    <label for="EmailText" class="form-label">Text</label>
+    <textarea class="form-control" id="EmailText" rows="3"></textarea>
+  </div>
+  <div class="mb-3 form-check">
+  </div>
+  <button type="submit" class="btn btn-primary" id ="send">Отправить</button>
+</form>
+
+</body>
+
+</html>
