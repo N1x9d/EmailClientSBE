@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.RabbitMQ.RabbitMQProducerService;
 import com.example.demo.models.Email;
 import com.sun.mail.pop3.POP3Folder;
 import com.sun.mail.pop3.POP3Store;
@@ -16,8 +17,11 @@ public class ReadEmailPOP3Impl {
 
   private String host;
 
-  public ReadEmailPOP3Impl(String host) {
+  private final RabbitMQProducerService rabbitMQProducerService;
+
+  public ReadEmailPOP3Impl(String host, RabbitMQProducerService rabbitMQProducerService) {
     this.host = host;
+    this.rabbitMQProducerService = rabbitMQProducerService;
   }
 
 
@@ -41,6 +45,7 @@ public class ReadEmailPOP3Impl {
 
       for (int i = 0; i < length; i++) {
         var email = new Email(messages[i]);
+        rabbitMQProducerService.sendMessage("New message from" + messages[i].getFrom()[0].toString(), "testRK");
         email.setMessage(messages[i].getContent().toString());
         email.setFrom(messages[i].getFrom());
         email.setReceiveDate(messages[i].getSentDate());

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.RabbitMQ.RabbitMQProducerService;
 import com.example.demo.ReadEmailPOP3Impl;
 import com.example.demo.models.Email;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,7 @@ import java.security.GeneralSecurityException;
 import java.util.*;
 
 @Controller
-public class home {
+public class HomeController {
 
   private List<Email> emailsBuffer;
   private String _hostPop = "pop.yandex.ru";
@@ -24,10 +26,15 @@ public class home {
   private String _login = "shatalovnick@yandex.ru";//заменить
   private String _password = "**************";//заменить
 
+  private final RabbitMQProducerService rabbitMQProducerService;
+
+  @Autowired
+  public HomeController (RabbitMQProducerService rabbitMQProducerService) {
+    this.rabbitMQProducerService = rabbitMQProducerService;
+  }
   @GetMapping("/")
   public String home(Model model) throws MessagingException, GeneralSecurityException {
-    var url = "pop3://nsh19021999:Dns102Lg400@pop.yandex.ru:995/INBOX";
-    ReadEmailPOP3Impl f = new ReadEmailPOP3Impl(_hostPop);
+    ReadEmailPOP3Impl f = new ReadEmailPOP3Impl(_hostPop, rabbitMQProducerService);
     emailsBuffer = f.getMails(_login,_password);
     model.addAttribute("Emails", emailsBuffer);
     return "index";
@@ -46,6 +53,11 @@ public class home {
   @GetMapping("/write")
   public String OpenMailWriter(Model model) throws MessagingException, GeneralSecurityException {
     return "WriteEmail";
+  }
+
+  @GetMapping("/send")
+  public void sendMessageToRabbit() {
+    rabbitMQProducerService.sendMessage("test", "testRK");
   }
 
   @PostMapping(value = "/SendEmail")
